@@ -1,0 +1,72 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Log in";
+}
+
+
+
+<!-- CSS Files -->
+<link href="~/css/atlantis.css" rel="stylesheet" />
+<link href="~/css/bootstrap.min.css" rel="stylesheet" />
+
+<body class="login">
+
+    <div class="wrapper wrapper-login">
+        <form id="account" method="post">
+            <div class="container container-login animated fadeIn">
+                <h3 class="text-center" style="color:white;">Sign In To Admin</h3>
+                <div class="login-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email" class="placeholder"><b style="color:white;">Email</b></label>
+                        <input asp-for="Input.Email" placeholder="name@example.com" type="email" id="username" type="text" aria-required="true" class="form-control">
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password" class="placeholder"><b style="color:white;">Password</b></label>
+                        <a id="forgot-password" asp-page="./ForgotPassword" class="link float-right">Forget Password ?</a>
+                        <div class="position-relative">
+                            <input id="password" asp-for="Input.Password" type="password" placeholder="password" class="form-control" aria-required="true">
+                            <div style="color:white;" class="show-password">
+                                <i class="icon-eye"></i>
+                            </div>
+                            
+                        </div>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group form-action-d-flex mb-3">
+                        <div class="custom-control custom-checkbox">
+                            <label asp-for="Input.RememberMe" class="form-label">
+                                <input class="form-check-input" asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                       
+                    </div>
+                    <div>
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
+                    </div>
+
+                    <div class="login-account">
+                        <span class="msg">Don't have an account yet ?</span>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="link">Sign Up</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+<script src="~/js/core/jquery.3.2.1.min.js"></script>
+<script src="~/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+<script src="~/js/core/popper.min.js"></script>
+<script src="~/js/core/bootstrap.min.js"></script>
+<script src="~/js/atlantis.min.js"></script>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

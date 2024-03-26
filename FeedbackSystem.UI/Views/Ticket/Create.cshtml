@@ -1,0 +1,183 @@
+﻿@using FeedbackSystem.UI.ViewModels
+@model RequestViewModel
+
+
+
+<div class="col-md-12">
+    <div class="card" style="margin-top:50px;">
+        <div class="card-header">
+
+            <div class="card-category">Your Location is:</div>
+            <div class="card-title">@Model.place.Code</div>
+        </div>
+        <form enctype="multipart/form-data" asp-action="CreateRequest">
+            <div class="card-body">
+                <div class="form-group form-show-validation row">
+                    <label for="birth" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Rate <span class="required-label">*</span></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="select2-input">
+                            <select name="rate" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <optgroup label="Problem Rate">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </optgroup>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label for="birth" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Reviewer <span class="required-label">*</span></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="select2-input">
+                            <select name="senderType" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <optgroup label="SenderType">
+                                    @foreach (var sender in Model.senderTypes)
+                                    {
+                                        <option value="@sender.Id">@sender.NameEn</option>
+                                    }
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label for="birth" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Request Type <span class="required-label">*</span></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="select2-input">
+                            <select name="requestType" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <optgroup label="requestType">
+                                    @foreach (var request in Model.requestTypes)
+                                    {
+                                        <option value="@request.Id">@request.NameEn</option>
+                                    }
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Other Request Type </label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="input-group">
+                            <input name="otherRequestType" type="text" class="form-control" aria-label="username" aria-describedby="username-addon">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label for="birth" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Classification <span class="required-label">*</span></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="select2-input">
+                            <select name="classification" class="form-control" required>
+                                <option value="">&nbsp;</option>
+                                <optgroup label="classification">
+                                    @foreach (var classification in Model.classifications)
+                                    {
+                                        <option value="@classification.Id">@classification.NameEn</option>
+                                    }
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Other Classification </label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="input-group">
+                            <input name="otherClassification" type="text" class="form-control" aria-label="username" aria-describedby="username-addon">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right"></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="input-file input-file-image">
+
+                            <input type="file" class="form-control form-control-file" id="uploadImg" name="uploadImgs" accept="image/*" multiple onchange="displayFileCount()">
+                            <label for="uploadImg" class="btn btn-primary btn-round btn-lg"><i class="fa fa-file-image"></i> Upload Images</label>
+                            <p id="fileCount">Number of selected files: 0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Description <span class="required-label">*</span></label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="input-group">
+                            <textarea rows="5" required type="text" class="form-control" aria-label="username" aria-describedby="username-addon" name="description"></textarea>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+                <div class="separator-solid"></div>
+                <input hidden value="@Model.place.Id" name="place" />
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Personal Information (Optional)</label>
+
+                </div>
+
+                <div class="form-group form-show-validation row">
+                    <label class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Name </label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <input type="text" class="form-control" name="name">
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label for="username" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Email Address </label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="username-addon">@@</span>
+                            </div>
+                            <input type="email" class="form-control" aria-label="username" aria-describedby="username-addon" name="email">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group form-show-validation row">
+                    <label for="name" class="col-lg-3 col-md-3 col-sm-4 mt-sm-2 text-right">Phone Number </label>
+                    <div class="col-lg-4 col-md-9 col-sm-8">
+                        <input type="number" class="form-control" name="phone">
+                    </div>
+                </div>
+            </div>
+            <div class="card-action">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input class="btn btn-success" type="submit">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function displayFileCount() {
+        var input = document.getElementById('uploadImg');
+        var fileCount = input.files.length;
+        var fileCountElement = document.getElementById('fileCount');
+        fileCountElement.textContent = 'Number of selected files: ' + fileCount;
+        $(this).parent('form').validate();
+    }
+    
+    
+</script>

@@ -1,0 +1,218 @@
+﻿@using FeedbackSystem.UI.ViewModels
+
+
+@model DashboardStatusViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<link href="~/css/home.css/homestyle.css" rel="stylesheet" />
+
+
+@* <h1>@Localizer["Welcome"]</h1> *@
+
+<div class="page-inner">
+    <h4 class="page-title">Dashboard</h4>
+    <div class="page-category">Here is some data represented into charts. </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Response Typies Chart</div>
+                </div>
+                <div id="container"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Request Typies Chart</div>
+                </div>  
+                <div id="container2"></div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Classification Chart</div>
+                </div>
+                <div id="container1"></div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    Highcharts.chart('container', {
+        chart: {
+            backgroundColor: '#1a1f34',
+            type: 'pie'
+        },
+        title: {
+            text: 'All Response Types',
+            style: {
+                color: 'white'
+            }
+        },
+        tooltip: {
+            valueSuffix: '%'
+        },
+        subtitle: {
+            text:
+                `The Request Total is: ${@Model.ReponseTypeDashboardStatus.AllTicketsResponses}`
+        },
+        plotOptions: {
+            series: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: [{
+                    enabled: true,
+                    distance: 20
+                }, {
+                    enabled: true,
+                    distance: -40,
+                    format: '{point.percentage:.1f}%',
+                    style: {
+                        fontSize: '1.2em',
+                        textOutline: 'none',
+                        opacity: 0.7
+                    },
+                    filter: {
+                        operator: '>',
+                        property: 'percentage',
+                        value: 10
+                    }
+                }]
+            }
+        },
+        series: [
+            {
+                name: 'Percentage',
+                colorByPoint: true,
+                data: [
+                    {
+                        name: 'New Request',
+                        y: @Model.ReponseTypeDashboardStatus.AllTicketsOfTypeNewRequest
+                        },
+                    {
+                        name: 'Solved Request',
+                        sliced: true,
+                        selected: true,
+                        y: @Model.ReponseTypeDashboardStatus.AllTicketsOfTypeSolvedRequest
+                        },
+                    {
+                        name: 'Closed Request',
+                        y: @Model.ReponseTypeDashboardStatus.AllTicketsOfTypeClosedRequest
+                        },
+                    {
+                        name: 'Engineering ',
+                        y: @Model.ReponseTypeDashboardStatus.AllTicketsOfTypeEngineerDep
+                        },
+                    {
+                        name: 'Proccessing Request',
+                        y: @Model.ReponseTypeDashboardStatus.AllTicketsOfTypeProccessingRequest
+                        }
+                ]
+            }
+        ]
+    });
+
+    Highcharts.chart('container1', {
+        chart: {
+            backgroundColor: '#1a1f34',
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45
+            }
+        },
+        title: {
+            text: 'All Classification Data',
+            align: 'left',
+            style: {
+                fontSize: '1.1em',
+                color: 'white'
+            }
+        },
+        subtitle: {
+            text: 'classification status numbers',
+            align: 'left'
+        },
+        plotOptions: {
+            pie: {
+                innerSize: 100,
+                depth: 45
+            }
+        },
+        series: [{
+            name: 'Medals',
+            data: [
+                ['Cleanliness', @Model.ClassificationDashboardStatus.Cleanliness],
+                ['Maintenance', @Model.ClassificationDashboardStatus.Maintenance],
+                ['Material shortage', @Model.ClassificationDashboardStatus.MaterialShortage],
+                ['Food And Drinks Quality', @Model.ClassificationDashboardStatus.FoodAndDrinksQuality],
+                ['Lost Items', @Model.ClassificationDashboardStatus.LostItems],
+                ['Other', @Model.ClassificationDashboardStatus.Other]
+
+            ]
+        }]
+    });
+
+    Highcharts.chart('container2', {
+        chart: {
+            backgroundColor: '#1a1f34',
+            plotBackgroundColor: null,
+            plotBorderWidth: 0,
+            plotShadow: false
+        },
+        title: {
+            
+            text: 'Request<br>Types',
+            align: 'center',
+            verticalAlign: 'middle',
+            y: 60,
+            style: {
+                fontSize: '1.1em',
+                color: 'white'
+            }
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                dataLabels: {
+                    enabled: true,
+                    distance: -50,
+                    style: {
+                        fontWeight: 'bold',
+                        color: 'white'
+                    }
+                },
+                startAngle: -90,
+                endAngle: 90,
+                center: ['50%', '75%'],
+                size: '110%'
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Request typies data',
+            innerSize: '50%',
+            data: [
+                
+                ['Complaint', @Model.RequestTypeDashboardStatus.Complaint],
+                ['Comment', @Model.RequestTypeDashboardStatus.Comment],
+                ['Request', @Model.RequestTypeDashboardStatus.Request],
+                ['Other', @Model.RequestTypeDashboardStatus.Other],
+                ['Suggestion', @Model.RequestTypeDashboardStatus.Suggestion],
+            ]
+        }]
+    });
+
+</script>

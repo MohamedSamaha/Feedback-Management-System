@@ -1,0 +1,44 @@
+﻿.language-selector__container select {
+    background-color: #253849;
+    border: 1px solid #253849;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: white;
+    display: block;
+    font-family: SourceSansPro, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    height: 40px;
+    min-width: 80px;
+    padding: 0 20px 0 16px;
+    outline: none;
+}
+.language-selector__container label {
+  position: relative;
+}
+.language-selector__container label:after {
+  content: "";
+  left: 54px;
+  top: 17px;
+  padding: 0 0 2px;
+  position: absolute;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  border-left: 3.5px solid transparent;
+  border-right: 3.5px solid transparent;
+  border-top: 5px solid white;
+  z-index: 100;
+}
+    .language-selector__container label:before {
+        content: "";
+        left: 56px;
+        top: 10px;
+        width: 20px;
+        height: 20px;
+        background: #253849;
+        position: absolute;
+        pointer-events: none;
+        display: block;
+        z-index: 1;
+    }

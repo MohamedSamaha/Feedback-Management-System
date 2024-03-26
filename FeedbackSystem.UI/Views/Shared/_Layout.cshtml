@@ -1,0 +1,325 @@
+﻿@using FeedbackSystem.Core.Entities
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<UserModel> SignInManager
+@inject UserManager<UserModel> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Atlantis Bootstrap 4 Admin Dashboard</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" href="https://via.placeholder.com/50" type="image/x-icon" />
+
+
+
+    
+
+    <!-- CSS Files -->
+
+    <link href="~/css/fonts.min.css" rel="stylesheet" />
+    <link href="~/css/atlantis.css" rel="stylesheet" />
+    <link href="~/css/fonts.css" rel="stylesheet" />
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- High Charts Files Scripts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+</head>
+<body data-background-color="dark">
+    <div class="wrapper">
+
+        <div class="main-header">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="dark">
+
+                <a href="/" class="logo">
+                    <img src="~/nta-images/nta-logo (1).png" alt="navbar brand" class="navbar-brand" width="120" height="45" />
+                </a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="icon-menu"></i>
+                    </span>
+                </button>
+                <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+                <div class="nav-toggle">
+                    <button class="btn btn-toggle toggle-sidebar">
+                        <i class="icon-menu"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- End Logo Header -->
+            <!-- Navbar Header -->
+            <nav class="nav navbar-header navbar-expand-lg" data-background-color="dark">
+
+
+
+
+                <ul class="nav navbar-nav topbar-nav ml-md-auto align-items-center">
+
+                    <partial name="_LoginPartial" />
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        @if (User.IsInRole(UserRole.Role_User_Admin))
+                        {
+                            <li class="nav-item dropdown hidden-caret mr-3">
+                                @await Html.PartialAsync("_SelectLanguagePartial")
+                            </li>
+
+                            <li class="nav-item dropdown hidden-caret mr-3">
+                                <a href="/" class="nav-link dropdown-toggle" aria-expanded="false">
+                                    <h6>Dashboard</h6>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown hidden-caret mr-3">
+                                <a href="/Admin/Tickets" class="nav-link dropdown-toggle" aria-expanded="false">
+                                    <h6>Tickets</h6>
+                                </a>
+                            </li>
+                            <li class="nav-item dropdown hidden-caret mr-3">
+                                <a href="/Admin/Places" class="nav-link dropdown-toggle" aria-expanded="false">
+                                    <h6>Places</h6>
+                                </a>
+                            </li>
+                        }
+                    }
+
+
+                </ul>
+
+            </nav>
+            <!-- End Navbar -->
+        </div>
+        @if (SignInManager.IsSignedIn(User))
+        {
+            @if (User.IsInRole(UserRole.Role_User_Admin))
+            {
+
+                <!-- Sidebar -->
+                <div class="sidebar sidebar-style-2" data-background-color="dark">
+
+
+                    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+                        <div class="sidebar-content">
+
+
+
+                            <ul class="nav nav-primary">
+
+
+                                <li class="nav-item">
+                                    <a href="/Admin/Buildings" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-home"></i>
+                                        <p>Buildings</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/Wings" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-dove"></i>
+                                        <p>Wings</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/Classification" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-align-center"></i>
+                                        <p>Classification</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/PlaceType" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-warehouse"></i>
+                                        <p>Place Type</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/Floor" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-layer-group"></i>
+                                        <p>Floor Number</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/RequestType" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-file-signature"></i>
+                                        <p>Request Type</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/ResponseType" class="collapsed" aria-expanded="false">
+                                        <i class="far fa-paper-plane"></i>
+                                        <p>Response Type</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/SenderType" class="collapsed" aria-expanded="false">
+                                        <i class="far fa-envelope"></i>
+                                        <p>Sender Type</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/Admin/Users" class="collapsed" aria-expanded="false">
+                                        <i class="fas fa-user-tie"></i>
+                                        <p>Users</p>
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </div>
+                    </div>
+
+
+                </div>
+
+            }
+            <div class="main-panel">
+                <div class="container">
+                    <div class="page-inner">
+
+                        @RenderBody()
+                    </div>
+                </div>
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <nav class="pull-left">
+                            <ul class="nav">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="https://nta.eg/">
+                                        NTA Academy
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </nav>
+                        <div class="copyright ml-auto">
+                            2024, made with <i class="fa fa-heart heart text-danger"></i> by NTA Developers
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        }
+        else
+        {
+            <div class="container">
+                <div class="page-inner">
+                    @RenderBody()
+                </div>
+            </div>
+        }
+    </div>
+
+
+
+
+
+    <!--   Core JS Files   -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    
+    <script src="~/js/core/jquery.3.2.1.min.js"></script>
+    <script src="~/js/core/popper.min.js"></script>
+    <!-- jQuery UI -->
+    <script src="~/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+    <script src="~/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="~/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    <!-- Moment JS -->
+    <script src="~/js/plugin/moment/moment.min.js"></script>
+    <!-- Chart JS -->
+    <script src="~/js/plugin/chart.js/chart.min.js"></script>
+    <!-- jQuery Sparkline -->
+    <script src="~/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+    <!-- jQuery Validation -->
+    <script src="~/js/plugin/jquery.validate/jquery.validate.min.js"></script>
+
+    @* <!-- jQuery Vector Maps -->
+    <script src="~/js/plugin/jqvmap/maps/jquery.vmap.world.js"></script>
+    <script src="~/js/plugin/jqvmap/jquery.vmap.min.js"></script> *@
+
+
+    <!-- include bootstrap after jQuery -->
+    <script src="~/js/core/bootstrap.min.js"></script>
+    <!-- Chart Circle -->
+    <script src="~/js/plugin/chart-circle/circles.min.js"></script>
+    <!-- Datatables -->
+    <script src="~/js/plugin/datatables/datatables.min.js"></script>
+    <!-- Bootstrap Notify -->
+    <script src="~/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <!-- Bootstrap Toggle -->
+    <script src="~/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
+
+    <!-- Google Maps Plugin -->
+    <script src="~/js/plugin/gmaps/gmaps.js"></script>
+    <!-- Dropzone -->
+    <script src="~/js/plugin/dropzone/dropzone.min.js"></script>
+    <!-- Fullcalendar -->
+    <script src="~/js/plugin/fullcalendar/fullcalendar.min.js"></script>
+
+    <!-- DateTimePicker -->
+    <script src="~/js/plugin/datepicker/bootstrap-datetimepicker.min.js"></script>
+    <!-- Bootstrap Tagsinput -->
+    <script src="~/js/plugin/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <!-- Bootstrap Wizard -->
+    <script src="~/js/plugin/bootstrap-wizard/bootstrapwizard.js"></script>
+
+    
+
+    <!-- Summernote -->
+    <script src="~/js/plugin/summernote/summernote-bs4.min.js"></script>
+
+    <!-- Select2 -->
+    <script src="~/js/plugin/select2/select2.full.min.js"></script>
+    <!-- Sweet Alert -->
+    <script src="~/js/plugin/sweetalert/sweetalert.min.js"></script>
+    <!-- Owl Carousel -->
+    <script src="~/js/plugin/owl-carousel/owl.carousel.min.js"></script>
+    <!-- Magnific Popup -->
+    <script src="~/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js"></script>
+
+   
+
+    <!-- Atlantis JS -->
+    <script src="~/js/atlantis.js"></script>
+    <script src="~/js/atlantis.min.js"></script>
+
+    <script src="~/js/lang/lang.js"></script>
+
+
+    <script>
+
+        $('#lineChart').sparkline([102, 109, 120, 99, 110, 105, 115], {
+            type: 'line',
+            height: '70',
+            width: '100%',
+            lineWidth: '2',
+            lineColor: '#177dff',
+            fillColor: 'rgba(23, 125, 255, 0.14)'
+        });
+
+        $('#lineChart2').sparkline([99, 125, 122, 105, 110, 124, 115], {
+            type: 'line',
+            height: '70',
+            width: '100%',
+            lineWidth: '2',
+            lineColor: '#f3545d',
+            fillColor: 'rgba(243, 84, 93, .14)'
+        });
+
+        $('#lineChart3').sparkline([105, 103, 123, 100, 95, 105, 115], {
+            type: 'line',
+            height: '70',
+            width: '100%',
+            lineWidth: '2',
+            lineColor: '#ffa534',
+            fillColor: 'rgba(255, 165, 52, .14)'
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

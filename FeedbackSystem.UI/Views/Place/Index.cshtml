@@ -1,0 +1,354 @@
+﻿@using FeedbackSystem.Core.ViewModels
+@model IEnumerable<PlaceViewModel>
+
+<div class="card m-4">
+    <div class="card-header">
+
+        <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+        <div class="d-flex align-items-center">
+            <h4 class="card-title">Add Place</h4>
+            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                <i class="fa fa-plus"></i>
+                Create Place
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Add Modal -->
+        <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document" style="max-width: 800px;">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">
+                            <span class="fw-mediumbold">
+                                Create
+                            </span>
+                            <span class="fw-light">
+                                Place
+                            </span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small">Create a new place and make sure to fill all the fields below</p>
+                        <form id="createPlaceForm">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Building</label>
+                                        <select class="form-control" required id="building">
+                                            @foreach (var building in Model.First().BuildingDto)
+                                            {
+                                                <option value="@building.Id">@building.NameEn</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Wing</label>
+                                        <select class="form-control" required id="wing">
+                                            @foreach (var wing in Model.First().WingDto)
+                                            {
+                                                <option value="@wing.Id">@wing.NameEn</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Place Type</label>
+                                        <select class="form-control" required id="placeType">
+                                            @foreach (var placeType in Model.First().PlaceTypeDto)
+                                            {
+                                                <option value="@placeType.Id">@placeType.NameEn</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Floor Number</label>
+                                        <select class="form-control" required id="floorNumber">
+                                            @foreach (var floor in Model.First().FloorNumberDto)
+                                            {
+                                                <option value="@floor.Id">@floor.NameEn</option>
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Place Code</label>
+                                        <input required id="placeCode" type="text" class="form-control" placeholder="fill place code">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Activation</label>
+                                        <select class="form-control" required id="formGroupDefaultSelect">
+                                            <option value="1">Active</option>
+                                            <option value="0">Not Active</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group form-group-default">
+                                        <label>Place Description</label>
+                                        <textarea rows="3" required id="placeDescription" type="text" class="form-control" placeholder="fill place description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="addRowButton" class="btn btn-primary" onclick="createPlace()">Create Place</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        
+        <div class="table-responsive">
+            <table id="add-row" class="display table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="width: 15%">Building</th>
+                        <th>Place Code</th>
+                        <th>Place Description</th>
+                        <th>Activation</th>
+                        <th>Last Updated</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th style="width: 15%">Building</th>
+                        <th>Place Code</th>
+                        <th>Place Description</th>
+                        <th>Activation</th>
+                        <th>Last Updated</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var place in Model)
+                    {
+                        <tr>
+                            <td>@place.Id</td>
+                            <td>@place.Building</td>
+                            <td>@place.PlaceCode</td>
+                            <td>@place.PlaceDescription</td>
+                            @if (place.Active == 1)
+                            {
+                                <td><span class="badge badge-success">Active</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge badge-danger">Not Active</span></td>
+                            }
+
+                            <td>@place.LastUpdated?.ToString("dd MMMM yyyy, HH:mm")</td>
+                            <td>
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="editRowModel-@place.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document" style="max-width: 800px;">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold">
+                                                        Edit
+                                                    </span>
+                                                    <span class="fw-light">
+                                                        Place
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="small">Edit building and make sure to fill all the fields below</p>
+                                                <form id="createPlaceForm-@place.Id">
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Building</label>
+                                                                <select class="form-control" required id="building-@place.Id">
+                                                                    @foreach (var building in place.BuildingDto)
+                                                                    {
+                                                                        <option value="@building.Id" selected="@(building.Id == place.BuildingId)">@building.NameEn</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Wing</label>
+                                                                <select class="form-control" required id="wing-@place.Id">
+                                                                    @foreach (var wing in place.WingDto)
+                                                                    {
+                                                                        <option value="@wing.Id" selected="@(wing.Id == place.WingId)">@wing.NameEn</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Place Type</label>
+                                                                <select class="form-control" required id="placeType-@place.Id">
+                                                                    @foreach (var placeType in place.PlaceTypeDto)
+                                                                    {
+                                                                        <option value="@placeType.Id" selected="@(placeType.Id == place.PlaceTypeId)">@placeType.NameEn</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Floor Number</label>
+                                                                <select class="form-control" required id="floorNumber-@place.Id">
+                                                                    @foreach (var floor in place.FloorNumberDto)
+                                                                    {
+                                                                        <option value="@floor.Id" selected="@(floor.Id == place.FloorId)">@floor.NameEn</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Place Code</label>
+                                                                <input required id="placeCode-@place.Id" value="@place.PlaceCode" type="text" class="form-control" placeholder="fill place code">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Activation</label>
+                                                                <select class="form-control" required id="formGroupDefaultSelect-@place.Id">
+                                                                    <option selected value="1">Active</option>
+                                                                    <option value="0">Not Active</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Place Description</label>
+                                                                <textarea rows="3" required id="placeDescription-@place.Id" type="text" class="form-control" placeholder="fill place description">@place.PlaceDescription</textarea>
+                                                            </div>
+                                                        </div>
+
+                                                        <div hidden class="alert alert-danger col-sm-12" role="alert" id="dangerEditAlert">
+                                                            Please Fill All the building Information!
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="button" id="addRowButton" class="btn btn-primary" onclick="editPlaceFunc('@place.Id')">Edit</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <!-- QR Code Modal -->
+                                <div class="modal fade" id="RowModel-@place.BuildingId" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document" >
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold">
+                                                        QR
+                                                    </span>
+                                                    <span class="fw-light">
+                                                        Code
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="small">Are you sure you want to download this place Qr Code in your computer?</p>
+                                                <div hidden class="qr-code-@place.Id" style="display: none;"></div>
+                                                
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <a id="downloadQr" class="btn btn-primary"></a>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-button-action">
+                                    <button type="button" data-toggle="modal" title="" class="btn btn-link btn-light" id="printQr-@place.Id" onclick="printQrFunc('@place.Id')" data-target="#RowModel-@place.BuildingId" data-original-title="QR Code">
+                                        <i class="fas fa-print"></i>
+                                    </button>
+                                    <button type="button" data-toggle="modal" title="" class="btn btn-link btn-primary btn-lg" data-target="#editRowModel-@place.Id" data-original-title="Edit Task">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" id="deletBuilding-@place.Id" onclick="deletePlaceFunc('@place.Id')" data-original-title="Remove">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/core/jquery.3.2.1.min.js"></script>
+<script src="~/js/place/placescript.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#basic-datatables').DataTable({
+        });
+
+        $('#multi-filter-select').DataTable({
+            "pageLength": 5,
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var select = $('<select class="form-control"><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex(
+                                $(this).val()
+                            );
+
+                            column
+                                .search(val ? '^' + val + '$' : '', true, false)
+                                .draw();
+                        });
+
+                    column.data().unique().sort().each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>')
+                    });
+                });
+            }
+        });
+
+        // Add Row
+        $('#add-row').DataTable({
+            "pageLength": 5,
+        });
+
+        var action = '<td> <div class="form-button-action"> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task"> <i class="fa fa-edit"></i> </button> <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Remove"> <i class="fa fa-times"></i> </button> </div> </td>';
+
+
+    });
+</script>

@@ -1,0 +1,222 @@
+﻿@using FeedbackSystem.Core.ViewModels
+@model List<TicketVM>
+
+<div class="card m-4">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h4 class="card-title">All Feedback Tickets </h4>
+
+        </div>
+    </div>
+    <div class="card-header table-responsive">
+        <div class="d-flex align-items-center">
+
+            <button id="filterButton" class="btn btn-primary btn-round ml-auto" data-filter="New Request">
+                New Requests
+            </button>
+            <button id="filterButton" class="btn btn-primary btn-round ml-auto" data-filter="Processing Request">
+
+                Processing Requests
+            </button>
+            <button id="filterButton" class="btn btn-primary btn-round ml-auto" data-filter="Solved Request">
+
+                Solved Requests
+            </button>
+            <button id="filterButton" class="btn btn-primary btn-round ml-auto" data-filter="Closed Request">
+
+                Closed Requests
+            </button>
+            <button id="filterButton" class="btn btn-primary btn-round ml-auto" data-filter="Engineering dep.">
+
+                Engineering dep.
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="add-row" class="display table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Rate</th>
+                        <th>Location</th>
+                        <th>Classification</th>
+                        <th>Request Type</th>
+                        <th>Response Type</th>
+                        <th>Sender Type</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Rate</th>
+                        <th>Location</th>
+                        <th>Classification</th>
+                        <th>Request Type</th>
+                        <th>Response Type</th>
+                        <th>Sender Type</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var ticket in Model)
+                    {
+                        <tr>
+                            <td>@ticket.Id</td>
+                            <td>@ticket.CreatedDate</td>
+                            <td>@ticket.Rate</td>
+                            <td>@ticket.Location</td>
+                            <td>@ticket.classification</td>
+                            <td>@ticket.requestType</td>
+                            <td>@ticket.responseType</td>
+                            <td>@ticket.senderType</td>
+                            <td>
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="editRowModel-@ticket.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document" style="max-width: 800px;">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold">
+                                                        Edit
+                                                    </span>
+                                                    <span class="fw-light">
+                                                        Feedback
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="small">Edit feedback and make sure to fill all the fields below</p>
+                                                <form>
+                                                    <div class="row">
+                                                        @if (ticket.TicketImages.Count() > 0)
+                                                        {
+                                                        <div class="col-md-12">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h4 class="card-title">View Attached Photos From Ticket</h4>
+                                                                    <p class="card-category">Click on any image to open it in fullscreen Mode</p>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <div class="row image-gallery">
+                                                                        
+                                                                            @foreach (var img in ticket.TicketImages)
+                                                                            {
+                                                                                <a href="~/ticketsimages/@img.ImageName" target="_blank" class="col-6 col-md-3 mb-4">
+
+                                                                                    <img src="~/ticketsimages/@img.ImageName" class="img-fluid" />
+                                                                                </a>
+                                                                            }
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        }
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Location</label>
+                                                                <input disabled id="location-@ticket.Id" value="@ticket.Location" type="text" class="form-control" placeholder="location name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Rate</label>
+                                                                <input disabled id="rate-@ticket.Id" value="@ticket.Rate" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Request Type</label>
+                                                                <input disabled id="requestType-@ticket.Id" value="@ticket.requestType" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Classification</label>
+                                                                <input disabled id="classification-@ticket.Id" value="@ticket.classification" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Sender Type</label>
+                                                                <input disabled id="senderType-@ticket.Id" value="@ticket.senderType" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Sender Name</label>
+                                                                <input disabled id="senderName-@ticket.Id" value="@ticket.SenderName" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Sender Email</label>
+                                                                <input disabled id="senderEmail-@ticket.Id" value="@ticket.SenderEmail" type="email" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Sender Phone Number</label>
+                                                                <input disabled id="senderPhone-@ticket.Id" value="@ticket.SenderPhone"  class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Description</label>
+                                                                <textarea disabled rows="3" id="description-@ticket.Id" type="text" class="form-control">@ticket.Description</textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Response Type</label>
+                                                                <select class="form-control" id="responseType-@ticket.Id">
+                                                                    <option value="@ticket.responseTypeId">@ticket.responseType</option>
+                                                                    @foreach (var t in ticket.responseTypeList)
+                                                                    {
+                                                                        <option value="@t.Id">@t.NameEn</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Response Note</label>
+                                                                <input id="responseNote-@ticket.Id" value="@ticket.ResponseNotes" placeholder="Type reponse note" type="text" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="button" id="addRowButton" class="btn btn-primary" onclick="editFeedback('@ticket.Id')">Edit</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-button-action">
+                                    <button type="button" data-toggle="modal" title="" class="btn btn-link btn-primary btn-lg" data-target="#editRowModel-@ticket.Id" data-original-title="Save">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/core/jquery.3.2.1.min.js"></script>
+<script src="~/js/plugin/jquery.magnific-popup/jquery.magnific-popup.min.js"></script>
+<script src="~/js/tickets/script.js"></script>

@@ -1,0 +1,194 @@
+﻿@using FeedbackSystem.Core.Dtos
+@model IEnumerable<FloorNumberDto>
+
+<div class="card m-4">
+    <div class="card-header">
+        <div class="d-flex align-items-center">
+            <h4 class="card-title">Add Floor Number</h4>
+            <button class="btn btn-primary btn-round ml-auto" data-toggle="modal" data-target="#addRowModal">
+                <i class="fa fa-plus"></i>
+                Add Floor Number
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Add Modal -->
+        <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title">
+                            <span class="fw-mediumbold">
+                                Add
+                            </span>
+                            <span class="fw-light">
+                                New
+                            </span>
+                            <span class="fw-light">
+                                Floor
+                            </span>
+                            <span class="fw-light">
+                                Number
+                            </span>
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="small">Create a new floor number and make sure to fill all the fields below</p>
+                        <form>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="form-group form-group-default">
+                                        <label>Floor Number Name In English</label>
+                                        <input required id="floorNameEnId" type="text" class="form-control" placeholder="fill floor Number name in english">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Floor Number Name In Arabic</label>
+                                        <input required id="floorNameArId" type="text" class="form-control" placeholder="fill floor number name in arabic">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group form-group-default">
+                                        <label>Select Activation</label>
+                                        <select class="form-control" required id="formGroupDefaultSelect">
+                                            <option value="1">Active</option>
+                                            <option value="0">Not Active</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer border-0">
+                                <button type="button" id="addRowButton" class="btn btn-primary" onclick="createFloor()">Create Floor</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+            <table id="add-row" class="display table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name In English</th>
+                        <th>Name In Arabic</th>
+                        <th>Activation</th>
+                        <th>Last Updated</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name In English</th>
+                        <th>Name In Arabic</th>
+                        <th>Activation</th>
+                        <th>Last Updated</th>
+                        <th style="width: 10%">Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach (var floor in Model)
+                    {
+                        <tr>
+                            <td>@floor.Id</td>
+                            <td>@floor.NameEn</td>
+                            <td>@floor.NameAr</td>
+                            @if (floor.Activation == 1)
+                            {
+                                <td><span class="badge badge-success">Active</span></td>
+                            }
+                            else
+                            {
+                                <td><span class="badge badge-danger">Not Active</span></td>
+                            }
+
+                            <td>@floor.UpdatedAt?.ToString("dd MMMM yyyy, HH:mm")</td>
+                            <td>
+                                <!-- Edit Modal -->
+                                <div class="modal fade" id="editRowModel-@floor.Id" tabindex="-1" role="dialog" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold">
+                                                        Edit
+                                                    </span>
+                                                    <span class="fw-light">
+                                                        Floor
+                                                    </span>
+                                                    <span class="fw-light">
+                                                        Number
+                                                    </span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p class="small">Edit floor nymber and make sure to fill all the fields below</p>
+                                                <form>
+                                                    <div class="row">
+                                                        <div class="col-sm-12">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Name In English</label>
+                                                                <input required id="floorNameEn-@floor.Id" value="@floor.NameEn" type="text" class="form-control" placeholder="fill floor name">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Name In Arabic</label>
+                                                                <input required id="floorNameAr-@floor.Id" value="@floor.NameAr" type="text" class="form-control" placeholder="fill floor number">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-group form-group-default">
+                                                                <label>Select Activation</label>
+                                                                <select class="form-control" required id="activation-@floor.Id">
+                                                                    <option value="1">Active</option>
+                                                                    <option value="0">Not Active</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div hidden class="alert alert-danger col-sm-12" role="alert" id="dangerEditAlert">
+                                                            Please Fill All the floor  Information!
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer border-0">
+                                                <button type="button" id="addRowButton" class="btn btn-primary" onclick="editFloor('@floor.Id')">Edit</button>
+                                                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="form-button-action">
+                                    <button type="button" data-toggle="modal" title="" class="btn btn-link btn-primary btn-lg" data-target="#editRowModel-@floor.Id" data-original-title="Edit Task">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" id="deletFloor-@floor.Id" onclick="deleteFloorFunc('@floor.Id')" data-original-title="Remove">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/core/jquery.3.2.1.min.js"></script>
+<script src="~/js/floornumber/script.js"></script>
