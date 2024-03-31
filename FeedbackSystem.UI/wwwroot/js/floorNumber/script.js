@@ -27,7 +27,7 @@ function createFloor() {
 						window.location.reload();
 					});
 			}, error: function (error) {
-				swal('Something Went Wrong!', {
+				swal('Something Went Wrong! Please insure that floor name is unique', {
 					icon: "error",
 					buttons: {
 						confirm: {

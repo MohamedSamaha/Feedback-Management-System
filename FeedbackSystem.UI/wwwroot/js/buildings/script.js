@@ -27,7 +27,8 @@ function createBuilding() {
 						window.location.reload();
 					});
 			}, error: function (error) {
-				swal('Something Went Wrong!', {
+				console.log(error);
+				swal('Something Went Wrong! Please insure that building name is unique', {
 					icon: "error",
 					buttons: {
 						confirm: {

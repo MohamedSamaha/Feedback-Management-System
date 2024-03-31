@@ -27,7 +27,7 @@ function createResponseType() {
 						window.location.reload();
 					});
 			}, error: function (error) {
-				swal('Something Went Wrong!', {
+				swal('Something Went Wrong! Please insure that response type name is unique', {
 					icon: "error",
 					buttons: {
 						confirm: {

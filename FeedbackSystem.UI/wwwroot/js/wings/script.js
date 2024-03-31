@@ -27,7 +27,7 @@ function createWing() {
 						window.location.reload();
 					});
 			}, error: function (error) {
-				swal('Something Went Wrong!', {
+				swal('Something Went Wrong! Please insure that wing name is unique', {
 					icon: "error",
 					buttons: {
 						confirm: {
